@@ -18,11 +18,13 @@ public class TwinFragment extends Fragment {
         View root = inflater.inflate(R.layout.twin_fragment, container, false);
         ButterKnife.inject(this, root);
 
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.top, TestFragment.newInstance("top1"), "top")
-                .replace(R.id.bottom, TestFragment.newInstance("bottom1"), "bottom")
-                //.addToBackStack(null)
-                .commit();
+        if(getChildFragmentManager().findFragmentByTag("top") == null) { // to avoid replacing fragments on configuration change
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.top, TestFragment.newInstance("top", 1), "top")
+                    .replace(R.id.bottom, TestFragment.newInstance("bottom", 1), "bottom")
+                            //.addToBackStack(null)
+                    .commit();
+        }
 
         ((ActionBarActivity)getActivity()).setTitle(getArguments().getString("actionBarTitle"));
         return root;

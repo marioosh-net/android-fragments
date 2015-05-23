@@ -16,10 +16,13 @@ public class MainActivity extends ActionBarActivity implements TestFragment.Clic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, TestFragment.newInstance("login"), "login")
-                //.addToBackStack("login")
-                .commit();
+
+        if(getSupportFragmentManager().findFragmentByTag("login") == null) { // to avoid replacing fragments on configuration change
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, TestFragment.newInstance("login", 1), "login")
+                            //.addToBackStack("login")
+                    .commit();
+        }
     }
 
     @Override
@@ -45,19 +48,20 @@ public class MainActivity extends ActionBarActivity implements TestFragment.Clic
         if(fragment != null && fragment instanceof TestFragment) {
 
             String title = fragment.getArguments().getString("title");
+            int count = fragment.getArguments().getInt("count");
 
             if(title.equals("login")) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, TwinFragment.newInstance("Twin1"))
                         .addToBackStack("twin1")
                         .commit();
-            } else if(title.equals("top1")) {
+            } else if(title.equals("top")) {
                 fragment.getParentFragment().getChildFragmentManager()
-                        .beginTransaction().replace(R.id.top, TestFragment.newInstance("top2"))
+                        .beginTransaction().replace(R.id.top, TestFragment.newInstance("top",++count))
                         .addToBackStack(null)
                         .commit();
-            } else if(title.equals("bottom1")) {
+            } else if(title.equals("bottom")) {
                 fragment.getParentFragment().getChildFragmentManager()
-                        .beginTransaction().replace(R.id.bottom, TestFragment.newInstance("bottom2"))
+                        .beginTransaction().replace(R.id.bottom, TestFragment.newInstance("bottom",++count))
                         .addToBackStack(null)
                         .commit();
             }

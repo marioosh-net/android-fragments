@@ -25,9 +25,10 @@ public class TestFragment extends Fragment {
     @InjectView(R.id.text) TextView text;
     @InjectView(R.id.ll) View ll;
 
-    public static TestFragment newInstance(String text) {
+    public static TestFragment newInstance(String text, int count) {
         Bundle b = new Bundle();
         b.putString("title", text);
+        b.putInt("count", count);
         TestFragment f = new TestFragment();
         f.setArguments(b);
         return f;
@@ -37,7 +38,7 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.test_fragment, container, false);
         ButterKnife.inject(this, root);
-        text.setText(getArguments().getString("title"));
+        text.setText(getArguments().getString("title")+getArguments().getInt("count"));
         return root;
     }
 
